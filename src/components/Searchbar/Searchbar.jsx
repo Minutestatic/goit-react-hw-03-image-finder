@@ -3,17 +3,17 @@ import { toast } from 'react-toastify';
 
 class Searchbar extends Component {
   state = {
-    q: '',
+    query: '',
   };
 
   onChangeInput = event => {
-    this.setState({ q: event.target.value.toLowerCase() });
+    this.setState({ query: event.target.value.toLowerCase() });
   };
 
   handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.q.trim() === '') {
+    if (this.state.query.trim() === '') {
       toast.warn('🦄 Введите слово для поиска!', {
         position: 'top-center',
         theme: 'colored',
@@ -21,8 +21,9 @@ class Searchbar extends Component {
       return;
     }
 
-    this.props.onSubmit(this.state.q);
-    this.setState({ q: '' });
+    this.props.onSubmit(this.state.query);
+    this.setState({ query: '' });
+    event.currentTarget.reset();
   };
 
   render() {

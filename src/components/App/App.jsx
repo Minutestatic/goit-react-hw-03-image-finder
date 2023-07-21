@@ -2,34 +2,24 @@ import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import getImages from 'api/app';
 import Searchbar from 'components/Searchbar';
+import ImageGallery from 'components/ImageGallery';
 
 class App extends Component {
   state = {
-    images: [],
-    q: '',
+    query: '',
     loading: false,
   };
 
-  async componentDidMount() {
-    try {
-      const imageData = await getImages();
-      this.setState({ images: imageData.hits });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  handleFormSubmit = q => {
-    console.log(q);
-    this.setState({ q });
+  handleFormSubmit = query => {
+    this.setState({ query });
   };
 
   render() {
     return (
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
+        <ImageGallery query={this.state.query} />
         <ToastContainer autoClose={5000} />
       </div>
     );
