@@ -1,8 +1,9 @@
 import ImageGalleryItem from 'components/ImageGalleryItem';
-const ImageGallery = ({ query }) => {
+import css from './ImageGallery.module.css';
+const ImageGallery = ({ images }) => {
   return (
-    <ul>
-      <ImageGalleryItem query={query} />
+    <ul className={css.i}>
+      <ImageGalleryItem images={images} />
     </ul>
   );
 };
