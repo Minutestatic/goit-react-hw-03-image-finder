@@ -6,6 +6,7 @@ import getImages from 'api/app';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
+import Loader from 'components/Loader/Loader';
 
 class App extends Component {
   state = {
@@ -49,14 +50,19 @@ class App extends Component {
   };
 
   render() {
-    const { images, hasMore } = this.state;
+    const { images, hasMore, loading } = this.state;
     const showLoadMoreButton = images.length > 0 && hasMore;
 
     return (
       <div>
+        {loading && <Loader />}
+
         <Searchbar onSubmit={this.handleFormSubmit} />
+
         <ImageGallery images={images} />
+
         {showLoadMoreButton && <Button loadMoreImages={this.loadMoreImages} />}
+
         <ToastContainer autoClose={1500} />
       </div>
     );
