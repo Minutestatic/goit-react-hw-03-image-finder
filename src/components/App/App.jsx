@@ -14,7 +14,7 @@ class App extends Component {
     query: '',
     page: 1,
     loading: false,
-    hasMore: true,
+    loadMore: null,
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -24,14 +24,18 @@ class App extends Component {
     ) {
       try {
         this.setState({ loading: true });
-        const imageData = await getImages(this.state.query, this.state.page);
+        const { query, page } = this.state;
 
-        if (imageData.hits.length === 0) {
-          this.setState({ hasMore: false });
-        } else {
-          this.setState(prevState => ({
-            images: [...prevState.images, ...imageData.hits],
-          }));
+        if (query && page > 0) {
+          const imageData = await getImages(query, page);
+          console.log(imageData);
+
+          if (imageData && imageData.hits) {
+            this.setState(prevState => ({
+              images: [...prevState.images, ...imageData.hits],
+              loadMore: this.state.page < Math.ceil(imageData.totalHits / 12),
+            }));
+          }
         }
       } catch (error) {
         console.error(error);
@@ -46,12 +50,14 @@ class App extends Component {
   };
 
   loadMoreImages = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState({
+      page: this.state.page + 1,
+    });
   };
 
   render() {
-    const { images, hasMore, loading } = this.state;
-    const showLoadMoreButton = images.length > 0 && hasMore;
+    const { images, loading, loadMore } = this.state;
+    console.log(loadMore);
 
     return (
       <div>
@@ -61,7 +67,7 @@ class App extends Component {
 
         <ImageGallery images={images} />
 
-        {showLoadMoreButton && <Button loadMoreImages={this.loadMoreImages} />}
+        {loadMore && <Button loadMoreImages={this.loadMoreImages} />}
 
         <ToastContainer autoClose={1500} />
       </div>
