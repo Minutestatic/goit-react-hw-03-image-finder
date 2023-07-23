@@ -1,5 +1,7 @@
 import { Component } from 'react';
 import { toast } from 'react-toastify';
+import css from './Searchbar.module.css';
+import { BiSearchAlt } from 'react-icons/bi';
 
 class Searchbar extends Component {
   state = {
@@ -28,16 +30,17 @@ class Searchbar extends Component {
 
   render() {
     return (
-      <header>
-        <form onSubmit={this.handleSubmit}>
-          <button type="submit">
-            <span>Search</span>
+      <header className={css.Searchbar}>
+        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
+          <button className={css['SearchForm-button']} type="submit">
+            <BiSearchAlt size="20" />
           </button>
 
           <input
+            className={css['SearchForm-input']}
             type="text"
-            // autocomplete="off"
-            // autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
             onChange={this.onChangeInput}
           />

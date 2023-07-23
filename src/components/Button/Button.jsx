@@ -1,5 +1,10 @@
+import css from './Button.module.css';
 const Button = ({ loadMoreImages }) => {
-  return <button onClick={loadMoreImages}>Load more</button>;
+  return (
+    <button className={css.Button} onClick={loadMoreImages}>
+      Load more
+    </button>
+  );
 };
 
 export default Button;

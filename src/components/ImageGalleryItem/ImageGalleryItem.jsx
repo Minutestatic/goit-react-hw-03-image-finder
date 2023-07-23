@@ -1,8 +1,14 @@
-const ImageGalleryItem = ({ images }) => {
+import css from './ImageGalleryItem.module.css';
+const ImageGalleryItem = ({ images, onImageClick }) => {
   return images.map(image => {
     return (
-      <li key={image.id}>
-        <img src={image.webformatURL} alt={image.tags} />
+      <li className={css.ImageGalleryItem} key={image.id}>
+        <img
+          className={css['ImageGalleryItem-image']}
+          src={image.webformatURL}
+          alt={image.tags}
+          onClick={() => onImageClick(image.largeImageURL)}
+        />
       </li>
     );
   });

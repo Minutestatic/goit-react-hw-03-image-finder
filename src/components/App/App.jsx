@@ -3,10 +3,14 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import getImages from 'api/app';
+
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
 import Loader from 'components/Loader/Loader';
+import Modal from 'components/Modal/Modal';
+
+import css from './App.module.css';
 
 class App extends Component {
   state = {
@@ -15,6 +19,8 @@ class App extends Component {
     page: 1,
     loading: false,
     loadMore: null,
+    showModal: false,
+    selectedImage: '',
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -28,7 +34,6 @@ class App extends Component {
 
         if (query && page > 0) {
           const imageData = await getImages(query, page);
-          console.log(imageData);
 
           if (imageData && imageData.hits) {
             this.setState(prevState => ({
@@ -55,19 +60,27 @@ class App extends Component {
     });
   };
 
-  render() {
-    const { images, loading, loadMore } = this.state;
-    console.log(loadMore);
+  openModal = imageUrl => {
+    this.setState({ showModal: true, selectedImage: imageUrl });
+  };
 
+  closeModal = () => {
+    this.setState({ showModal: false, selectedImage: '' });
+  };
+
+  render() {
+    const { images, loading, loadMore, selectedImage, showModal } = this.state;
     return (
-      <div>
+      <div className={css.App}>
         {loading && <Loader />}
 
         <Searchbar onSubmit={this.handleFormSubmit} />
 
-        <ImageGallery images={images} />
+        <ImageGallery images={images} onImageClick={this.openModal} />
 
         {loadMore && <Button loadMoreImages={this.loadMoreImages} />}
+
+        {showModal && <Modal image={selectedImage} onClose={this.closeModal} />}
 
         <ToastContainer autoClose={1500} />
       </div>
